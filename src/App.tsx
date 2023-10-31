@@ -12,6 +12,31 @@ function App() {
     setGreetMsg(await invoke("greet", { name }));
   }
 
+  function executeCommands() {
+    invoke('simple_command')
+
+    invoke('command_with_message', { message: 'Halo' }).then(message => {
+      console.log('command_with_message', message)
+    })
+
+    invoke('command_with_object', { message: { field_str: 'Halo', field_u32: 16 } }).then(message => {
+      console.log('command_with_object', message)
+    })
+
+    for (let arg of [1, 2, 3]) {
+      invoke('command_with_error', { arg }).then(message => {
+        console.log('command_with_error', message)
+      }).catch(message => {
+        console.error('command_with_error', message)
+      })
+    }
+
+    invoke('async_command', { arg: 10 }).then(message => {
+      console.log('async_command', message)
+    })
+
+  }
+
   return (
     <div className="container">
       <h1>Welcome to Tauri!</h1>
@@ -46,6 +71,9 @@ function App() {
       </form>
 
       <p>Hello My First Tauri</p>
+
+      <div>Hello Tauri.</div>
+      <button onClick={executeCommands}>Execute Commands</button>
     </div>
   );
 }
